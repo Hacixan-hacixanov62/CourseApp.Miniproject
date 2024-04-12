@@ -1,28 +1,43 @@
 ﻿using Domain.Comman;
+using Microsoft.EntityFrameworkCore;
+using Repository.Data;
 using Repository.Repositories.Interfaces;
 
 namespace Repository.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
-        public Task DeleteAsync(T entity)
+        private readonly AppDbContext _context;
+        public BaseRepository()
         {
-            throw new NotImplementedException();
+            _context = new AppDbContext();
         }
 
-        public Task<List<T>> GetAllAsync()
+        public async Task CreateAsync(T entity)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().ToListAsync();
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public async Task DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+           _context.Set<T>().Remove(entity);
         }
 
-        public Task UpdateAsync(int id)
+        public async Task<List<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().ToListAsync();
         }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _context.Set<T>().FindAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            _context.Set<T>().Update(entity);
+        }
+
+     
     }
 }
