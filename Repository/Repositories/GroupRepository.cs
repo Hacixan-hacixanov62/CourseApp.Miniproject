@@ -12,40 +12,34 @@ namespace Repository.Repositories
     {
 
         private readonly AppDbContext _context;
-        private object stringList;
-
+       
         public GroupRepository()
         {
             _context = new AppDbContext();
         }
 
-        public Task<List<Group>> FilterByEducationNameAsync(string name)
+        public async Task<List<Group>> FilterByEducationNameAsync(string name)
         {
 
-            throw new NotImplementedException();
+            return await _context.Set<Group>().Include(m=>m.Education).Where(m=>m.Education.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync(); 
 
-            //var MS = Group.FilterByEducationNameAsync().OrderBy(x => x.Branch).ToList();
-            //var MS = stringList.OrderBy(name => name);
         }
 
-        public Task<List<Group>> FilterByEducationNameAsync()
+        public async Task<List<Group>> GetAllWithEducationIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Group>().Where(m => m.EducationId == id).ToListAsync();
+
         }
 
-        public Task<List<Group>> GetAllWithEducationIdAsync()
+        public async Task<List<Group>> SearchAsync(string searchtext)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Group>().Where(m => m.Name.ToLower().Trim().Contains(searchtext.ToLower().Trim())).ToListAsync();
         }
 
-        public Task<List<Group>> SearchAsync()
+        public async Task<List<Group>> SortWithCapacityAsync(int capacity)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Group>().Where(m => m.Capacity == capacity).ToListAsync();
         }
 
-        public Task<List<Group>> SortWithCapacityAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

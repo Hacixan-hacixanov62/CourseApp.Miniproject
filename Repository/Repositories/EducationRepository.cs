@@ -17,7 +17,7 @@ namespace Repository.Repositories
             _context = new AppDbContext();
         }
 
-        public async Task<List<Education>> GetAllWithGroupsAsync(string group)
+        public async Task<List<Education>> GetAllWithGroupsAsync()
         {
             return await _context.Set<Education>().ToListAsync();
         }
@@ -29,11 +29,25 @@ namespace Repository.Repositories
             // return Task<Education>Where( m.Name.Contains(name)).ToList();
         }
 
-        public async Task<List<Education>> SortWithCreatedDate(string date)
+        public async Task<List<Education>> SortWithCreatedDateAsync(string date)
         {
             //return await _context.Set<Education>().Include(date).ToListAsync();
 
-            return await _context.Set<Education>().Where<Education>(m =>m.Name.ToLower().Trim().Contains(date.ToLower().Trim())).ToListAsync();
+            if (date == "desc")
+            {
+                return await _context.Set<Education>().OrderByDescending(m => m.CreatedDate).ToListAsync();
+            }
+            else if (date == "asc")
+            {
+                return await _context.Set<Education>().OrderBy(m => m.CreatedDate).ToListAsync();
+            }
+            else
+            {
+                return null;
+            }
+
+
+           
         }
     }
 }

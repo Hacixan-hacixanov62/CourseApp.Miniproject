@@ -1,1 +1,8 @@
-﻿Console.WriteLine("sdsds");
+﻿
+
+using Domain.Models;
+
+Education education = new Education();
+
+
+
