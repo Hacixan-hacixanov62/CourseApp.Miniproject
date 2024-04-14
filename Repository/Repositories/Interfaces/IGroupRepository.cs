@@ -9,7 +9,7 @@ namespace Repository.Repositories.Interfaces
         Task<List<Group>> SearchAsync(string searchtext);
         Task<List<Group>> FilterByEducationNameAsync(string name);
         Task<List<Group>>GetAllWithEducationIdAsync(int id);
-        Task<List<Group>> SortWithCapacityAsync(int capacity);
+        Task<List<Group>> SortWithCapacityAsync(string capacity);
 
 
 

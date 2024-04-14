@@ -10,5 +10,8 @@
         public const string AddSuccess = "Data added successfully";
         public const string UpdateSuccess = "Data updated successfully";
         public const string DeleteSuccess = "Data deleted successfully";
+        public const string InvalidCapacityFormat = "Please try again";
+
+
     }
 }

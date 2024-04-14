@@ -17,9 +17,22 @@ namespace Repository.Repositories
             _context = new AppDbContext();
         }
 
+        public async Task CreateAsync(Education education)
+        {
+            await _context.Educations.AddAsync(education);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<Education>> GetAllWithGroupsAsync()
         {
-            return await _context.Set<Education>().ToListAsync();
+            var educations = await _context.Set<Education>().Include(m=>m.Groups).ToListAsync();
+
+             
+            if (educations.Count == 0)
+            {
+                await Console.Out.WriteLineAsync("Data not found");
+            }
+            return educations;
         }
 
         public async Task<List<Education>> SearchAsync(string name)

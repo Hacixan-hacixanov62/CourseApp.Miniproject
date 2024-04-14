@@ -1,8 +1,7 @@
 ﻿
 
-using Domain.Models;
+using ConsoleApp.Miniproject2.Controllers;
 
-Education education = new Education();
-
+EducationControllers educationControllers = new ();
 
 

@@ -53,7 +53,7 @@ namespace Service.Services
             return await _groupRepository.GetAllWithEducationIdAsync(id);
         }
 
-        public async Task<List<Group>> SortWithCapacityAsync(int capacity)
+        public async Task<List<Group>> SortWithCapacityAsync(string capacity)
         {
             return await _groupRepository.SortWithCapacityAsync(capacity);
         }
@@ -72,5 +72,9 @@ namespace Service.Services
             return group;
         }
 
+        public Task CreateAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

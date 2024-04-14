@@ -43,7 +43,9 @@ namespace Service.Services
 
         public async Task<List<Education>> GetAllWithGroupsAsync()
         {
+            
             return await _educationRepository.GetAllWithGroupsAsync();
+          
         }
 
         public async Task<Education> GetByIdAsync(int? id)
@@ -70,7 +72,7 @@ namespace Service.Services
             return await _educationRepository.SortWithCreatedDateAsync(date);
         }
 
-        public Task UpdateAsync(Education data)
+        public async Task UpdateAsync(Education data)
         {
             throw new NotImplementedException();
         }

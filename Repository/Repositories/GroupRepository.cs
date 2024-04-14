@@ -35,10 +35,22 @@ namespace Repository.Repositories
         {
             return await _context.Set<Group>().Where(m => m.Name.ToLower().Trim().Contains(searchtext.ToLower().Trim())).ToListAsync();
         }
-
-        public async Task<List<Group>> SortWithCapacityAsync(int capacity)
+        
+        public async Task<List<Group>> SortWithCapacityAsync(string capacity)
         {
-            return await _context.Set<Group>().Where(m => m.Capacity == capacity).ToListAsync();
+            if (capacity == "desc")
+            {
+                return await _context.Set<Group>().OrderByDescending(m => m.Capacity).ToListAsync();
+            }
+            else if (capacity == "asc")
+            {
+                return await _context.Set<Group>().OrderBy(m => m.Capacity).ToListAsync();
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
     }
