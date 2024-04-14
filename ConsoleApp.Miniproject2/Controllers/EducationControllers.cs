@@ -88,74 +88,74 @@ namespace ConsoleApp.Miniproject2.Controllers
         public async Task EducationUpdateAsync()
         {
 
-            //    if (_educationService.GetAllAsync().Count == 0)
-            //    {
-            //        ConsoleColor.Red.WriteConsole("There is not any group. Please create one");
-            //        return;
-            //    }
+            if (_educationService.GetAllAsync().Count == 0)
+            {
+                ConsoleColor.Red.WriteConsole("There is not any group. Please create one");
+                return;
+            }
 
-            //    Console.WriteLine();
-            //    ConsoleColor.Yellow.WriteConsole("Groups:");
-            //    _educationService.GetAllAsync();
+            Console.WriteLine();
+            ConsoleColor.Yellow.WriteConsole("Groups:");
+            _educationService.GetAllAsync();
 
-            //    ConsoleColor.Yellow.WriteConsole("Enter id of the group you want to update: (Press Enter to cancel)");
-            //Id: string idStr = Console.ReadLine();
+            ConsoleColor.Yellow.WriteConsole("Enter id of the group you want to update: (Press Enter to cancel)");
+        Id: string idStr = Console.ReadLine();
 
-            //    if (string.IsNullOrWhiteSpace(idStr))
-            //    {
-            //        return;
-            //    }
+            if (string.IsNullOrWhiteSpace(idStr))
+            {
+                return;
+            }
 
-            //    int id;
+            int id;
 
-            //    if (!int.TryParse(idStr, out id))
-            //    {
-            //        ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidIdFormat + ". Please try again:");
-            //        goto Id;
-            //    }
-            //    else
-            //    {
-            //        if (id < 1)
-            //        {
-            //            ConsoleColor.Red.WriteConsole("Id cannot be less than 1. Please try again:");
-            //            goto Id;
-            //        }
+            if (!int.TryParse(idStr, out id))
+            {
+                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidIdFormat + ". Please try again:");
+                goto Id;
+            }
+            else
+            {
+                if (id < 1)
+                {
+                    ConsoleColor.Red.WriteConsole("Id cannot be less than 1. Please try again:");
+                    goto Id;
+                }
 
-            //        if (!_educationService.GetAll().Any(m => m.Id == id))
-            //        {
-            //            ConsoleColor.Red.WriteConsole(ResponseMessages.DataNotFound);
-            //            return;
-            //        }
+                if (!_educationService.GetAll().Any(m => m.Id == id))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.DataNotFound);
+                    return;
+                }
 
-            //        ConsoleColor.Yellow.WriteConsole("Enter name (Press Enter if you don't want to change):");
-            //        string updatedName = Console.ReadLine().Trim();
+                ConsoleColor.Yellow.WriteConsole("Enter name (Press Enter if you don't want to change):");
+                string updatedName = Console.ReadLine().Trim();
 
-            //        ConsoleColor.Yellow.WriteConsole("Enter teacher name of this group (Press Enter if you don't want to change):");
-            //    Teacher: string updatedTeacher = Console.ReadLine().Trim();
+                ConsoleColor.Yellow.WriteConsole("Enter teacher name of this group (Press Enter if you don't want to change):");
+            Teacher: string updatedTeacher = Console.ReadLine().Trim();
 
-            //        if (!string.IsNullOrEmpty(updatedTeacher))
-            //        {
-            //            if (!Regex.IsMatch(updatedTeacher, @"^[\p{L}]+(?:\s[\p{L}]+)?$"))
-            //            {
-            //                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidNameFormat);
-            //                goto Teacher;
-            //            }
-            //        }
+                if (!string.IsNullOrEmpty(updatedTeacher))
+                {
+                    if (!Regex.IsMatch(updatedTeacher, @"^[\p{L}]+(?:\s[\p{L}]+)?$"))
+                    {
+                        ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidNameFormat);
+                        goto Teacher;
+                    }
+                }
 
-            //        ConsoleColor.Yellow.WriteConsole("Enter room name of this group (Press Enter if you don't want to change):");
-            //        string updatedRoom = Console.ReadLine().Trim();
+                ConsoleColor.Yellow.WriteConsole("Enter room name of this group (Press Enter if you don't want to change):");
+                string updatedRoom = Console.ReadLine().Trim();
 
-            //        try
-            //        {
-            //            _educationService.Update(new() { Id = id, Name = updatedName, Teacher = updatedTeacher, Room = updatedRoom });
+                try
+                {
+                    _educationService.UpdateAsync(new() { Id = id, Name = updatedName,});
 
-            //            ConsoleColor.Green.WriteConsole(ResponseMessages.UpdateSuccess);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            ConsoleColor.Red.WriteConsole(ex.Message);
-            //        }
-        }
+                    ConsoleColor.Green.WriteConsole(ResponseMessages.UpdateSuccess);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                }
+            }
 
         public async Task EducationDeleteAsync()
         {

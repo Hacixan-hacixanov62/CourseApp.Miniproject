@@ -166,8 +166,89 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         public async Task GroupUpdateAsync()
         {
+            bool isInputValid = false;
 
+            while (!isInputValid)
+            {
+                try
+                {
+                    ConsoleColor.Cyan.WriteConsole("Please write Group ID:");
+
+                uId: string idStr = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(idStr))
+                    {
+                        Console.WriteLine("ID can't be empty. Please write again.");
+                        goto uId;
+                    }
+
+                    if (!int.TryParse(idStr, out int id))
+                    {
+                        Console.WriteLine("Format is wrong. Please write correctly.");
+                        goto uId;
+                    }
+
+                    var existingGroup = await _groupService.GetByIdAsync(id);
+                    if (existingGroup == null)
+                    {
+                        Console.WriteLine("Group not found");
+                        goto uId;
+                    }
+
+                    ConsoleColor.Cyan.WriteConsole("Please write new group name:");
+                    string name = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        name = existingGroup.Name;
+                    }
+                    else if (!Regex.IsMatch(name, @"^[\p{L}\p{M}' \.\-]+$"))
+                    {
+                        ConsoleColor.Red.WriteConsole("Input is not correct, please try again.");
+                        continue;
+                    }
+
+                    ConsoleColor.Cyan.WriteConsole("Please write new group capacity :");
+                    string capacityStr = Console.ReadLine();
+                    int capacity;
+                    if (string.IsNullOrWhiteSpace(capacityStr))
+                    {
+                        capacity = existingGroup.Capacity;
+                    }
+                    else if (!int.TryParse(capacityStr, out capacity))
+                    {
+                        ConsoleColor.Red.WriteConsole("Input is not correct, please try again.");
+                        continue;
+                    }
+
+                    ConsoleColor.Cyan.WriteConsole("Please write new education ID:");
+                    string eduIdStr = Console.ReadLine();
+                    int eduId;
+                    if (string.IsNullOrWhiteSpace(eduIdStr))
+                    {
+                        eduId = existingGroup.EducationId;
+                    }
+                    else if (!int.TryParse(eduIdStr, out eduId))
+                    {
+                        ConsoleColor.Red.WriteConsole("Input is not correct, please try again.");
+                        continue;
+                    }
+
+                    existingGroup.Name = name;
+                    existingGroup.Capacity = capacity;
+                    existingGroup.EducationId = eduId;
+
+                    await _groupService.UpdateAsync(existingGroup);
+                    Console.WriteLine("Group successfully updated.");
+                    isInputValid = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
+    
+            
 
         public async Task GroupGetAllAsync()
         {

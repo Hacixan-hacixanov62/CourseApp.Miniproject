@@ -5,6 +5,7 @@ using Repository.Repositories.Interfaces;
 using Service.Helpers.Constans;
 using Service.Helpers.Exceptions;
 using Service.Services.Interfaces;
+using System.Xml.Linq;
 
 namespace Service.Services
 {
@@ -18,9 +19,11 @@ namespace Service.Services
         }
 
 
-        public Task UpdateAsync()
+        public async  Task UpdateAsync(Group group)
         {
-            throw new NotImplementedException();
+           await _groupRepository.Groups.UpdateAsync(group);
+            _groupRepository.SaveChangesAsync();
+
         }
 
         public async Task DeleteAsync(int? id)
