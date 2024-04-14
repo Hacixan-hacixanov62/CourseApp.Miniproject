@@ -4,7 +4,7 @@ namespace Service.Services.Interfaces
 {
     public interface IGroupService
     {
-        Task CreateAsync();
+        Task CreateAsync(Group group);
         Task UpdateAsync();
         Task DeleteAsync(int? id);
         Task<List<Group>> SearchAsync(string name);

@@ -74,7 +74,7 @@ namespace Service.Services
 
         public async Task UpdateAsync(Education data)
         {
-            throw new NotImplementedException();
+             await _educationRepository.UpdateAsync(data);
         }
    
     

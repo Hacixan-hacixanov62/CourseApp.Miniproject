@@ -21,7 +21,7 @@ namespace Repository.Repositories
         public async Task<List<Group>> FilterByEducationNameAsync(string name)
         {
 
-            return await _context.Set<Group>().Include(m=>m.Education).Where(m=>m.Education.Name.ToLower().Trim().Contains(name.ToLower().Trim())).ToListAsync(); 
+            return await _context.Set<Group>().Include(m=>m.Education).Where(m=>m.Education.Name.ToLower().Trim() == name.ToLower().Trim()).ToListAsync(); 
 
         }
 

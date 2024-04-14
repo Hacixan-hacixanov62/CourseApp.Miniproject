@@ -18,7 +18,7 @@ namespace ConsoleApp.Miniproject2.Controllers
             _educationService = new EducationService();
         }
 
-        public async Task CreateAsync()
+        public async Task EducationCreateAsync()
         {
 
             ConsoleColor.Magenta.WriteConsole("Add Education name: ");
@@ -31,7 +31,7 @@ namespace ConsoleApp.Miniproject2.Controllers
             }
 
             var result = await _educationService.GetAllAsync();
-            if(result.Any(m=>m.Name == name))
+            if (result.Any(m => m.Name == name))
             {
                 ConsoleColor.Red.WriteConsole("Please add new name ");
                 goto Name;
@@ -49,8 +49,8 @@ namespace ConsoleApp.Miniproject2.Controllers
                 goto Name;
             }
 
-              ConsoleColor.Magenta.WriteConsole("Add Education color: ");
-           Color: string color= Console.ReadLine();
+            ConsoleColor.Magenta.WriteConsole("Add Education color: ");
+        Color: string color = Console.ReadLine();
 
 
             if (string.IsNullOrWhiteSpace(color))
@@ -74,9 +74,9 @@ namespace ConsoleApp.Miniproject2.Controllers
                     ConsoleColor.Green.WriteConsole("Data successfully added");
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    ConsoleColor.Red.WriteConsole("There is no group with specified id. Please try again :");
                     goto Color;
                 }
             }
@@ -85,11 +85,83 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         }
 
-        public async Task DeleteAsync()
+        public async Task EducationUpdateAsync()
+        {
+
+            //    if (_educationService.GetAllAsync().Count == 0)
+            //    {
+            //        ConsoleColor.Red.WriteConsole("There is not any group. Please create one");
+            //        return;
+            //    }
+
+            //    Console.WriteLine();
+            //    ConsoleColor.Yellow.WriteConsole("Groups:");
+            //    _educationService.GetAllAsync();
+
+            //    ConsoleColor.Yellow.WriteConsole("Enter id of the group you want to update: (Press Enter to cancel)");
+            //Id: string idStr = Console.ReadLine();
+
+            //    if (string.IsNullOrWhiteSpace(idStr))
+            //    {
+            //        return;
+            //    }
+
+            //    int id;
+
+            //    if (!int.TryParse(idStr, out id))
+            //    {
+            //        ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidIdFormat + ". Please try again:");
+            //        goto Id;
+            //    }
+            //    else
+            //    {
+            //        if (id < 1)
+            //        {
+            //            ConsoleColor.Red.WriteConsole("Id cannot be less than 1. Please try again:");
+            //            goto Id;
+            //        }
+
+            //        if (!_educationService.GetAll().Any(m => m.Id == id))
+            //        {
+            //            ConsoleColor.Red.WriteConsole(ResponseMessages.DataNotFound);
+            //            return;
+            //        }
+
+            //        ConsoleColor.Yellow.WriteConsole("Enter name (Press Enter if you don't want to change):");
+            //        string updatedName = Console.ReadLine().Trim();
+
+            //        ConsoleColor.Yellow.WriteConsole("Enter teacher name of this group (Press Enter if you don't want to change):");
+            //    Teacher: string updatedTeacher = Console.ReadLine().Trim();
+
+            //        if (!string.IsNullOrEmpty(updatedTeacher))
+            //        {
+            //            if (!Regex.IsMatch(updatedTeacher, @"^[\p{L}]+(?:\s[\p{L}]+)?$"))
+            //            {
+            //                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidNameFormat);
+            //                goto Teacher;
+            //            }
+            //        }
+
+            //        ConsoleColor.Yellow.WriteConsole("Enter room name of this group (Press Enter if you don't want to change):");
+            //        string updatedRoom = Console.ReadLine().Trim();
+
+            //        try
+            //        {
+            //            _educationService.Update(new() { Id = id, Name = updatedName, Teacher = updatedTeacher, Room = updatedRoom });
+
+            //            ConsoleColor.Green.WriteConsole(ResponseMessages.UpdateSuccess);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            ConsoleColor.Red.WriteConsole(ex.Message);
+            //        }
+        }
+
+        public async Task EducationDeleteAsync()
         {
 
 
-            ConsoleColor.Cyan.WriteConsole("Add education id:");
+            ConsoleColor.White.WriteConsole("Add education id:");
         Id: string idStr = Console.ReadLine();
             int id;
             bool isCorrectIdFormat = int.TryParse(idStr, out id);
@@ -97,7 +169,7 @@ namespace ConsoleApp.Miniproject2.Controllers
             {
                 try
                 {
-                       _educationService.DeleteAsync(id);
+                  await  _educationService.DeleteAsync(id);
 
                     ConsoleColor.Green.WriteConsole("Data successfully deleted");
                 }
@@ -115,7 +187,7 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         }
 
-        public async Task GetAllAsync()
+        public async Task EducationGetAllAsync()
         {
             var response = await _educationService.GetAllAsync();
 
@@ -127,30 +199,30 @@ namespace ConsoleApp.Miniproject2.Controllers
             }
         }
 
-        public async Task GetAllWithGroupsAsync()
+        public async Task EducationGetAllWithGroupsAsync()
         {
             try
             {
                 var educations = await _educationService.GetAllWithGroupsAsync();
 
-                if(educations.Count == 0)
+                if (educations.Count == 0)
                 {
                     ConsoleColor.Red.WriteConsole("Data notfound");
                 }
-                foreach(var item  in educations)
+                foreach (var item in educations)
                 {
                     string result = $"Name : {item.Name}, Groups : {string.Join(", ", item.Groups)}";
                     Console.WriteLine(result);
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 ConsoleColor.Red.WriteConsole(ex.Message);
             }
 
         }
 
-        public async Task GetByIdAsync()
+        public async Task EducationGetByIdAsync()
         {
             ConsoleColor.Cyan.WriteConsole("Add Id: ");
         Id: string idStr = Console.ReadLine();
@@ -179,7 +251,7 @@ namespace ConsoleApp.Miniproject2.Controllers
         }
 
 
-        public async Task SearchAsync()
+        public async Task EducationSearchAsync()
 
         {
 
@@ -216,14 +288,14 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         }
 
-        public async Task SortWithCreatedDateAsync()
+        public async Task EducationSortWithCreatedDateAsync()
         {
             ConsoleColor.DarkCyan.WriteConsole("Enter Name of the student you want to delete: (Press Enter to cancel)");
         Name: string sortName = Console.ReadLine();
 
             if (sortName == "asc" || sortName == "desc")
             {
-                
+
 
 
             }
@@ -233,82 +305,6 @@ namespace ConsoleApp.Miniproject2.Controllers
         }
 
 
-
-
-        public async Task UpdateAsync()
-        {
-        //    if (_educationService.GetAllAsync().Count == 0)
-        //    {
-        //        ConsoleColor.Red.WriteConsole("There is not any group. Please create one");
-        //        return;
-        //    }
-
-        //    Console.WriteLine();
-        //    ConsoleColor.Yellow.WriteConsole("Groups:");
-        //    _educationService.GetAllAsync();
-
-        //    ConsoleColor.Yellow.WriteConsole("Enter id of the group you want to update: (Press Enter to cancel)");
-        //Id: string idStr = Console.ReadLine();
-
-        //    if (string.IsNullOrWhiteSpace(idStr))
-        //    {
-        //        return;
-        //    }
-
-        //    int id;
-
-        //    if (!int.TryParse(idStr, out id))
-        //    {
-        //        ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidIdFormat + ". Please try again:");
-        //        goto Id;
-        //    }
-        //    else
-        //    {
-        //        if (id < 1)
-        //        {
-        //            ConsoleColor.Red.WriteConsole("Id cannot be less than 1. Please try again:");
-        //            goto Id;
-        //        }
-
-        //        if (!_educationService.GetAll().Any(m => m.Id == id))
-        //        {
-        //            ConsoleColor.Red.WriteConsole(ResponseMessages.DataNotFound);
-        //            return;
-        //        }
-
-        //        ConsoleColor.Yellow.WriteConsole("Enter name (Press Enter if you don't want to change):");
-        //        string updatedName = Console.ReadLine().Trim();
-
-        //        ConsoleColor.Yellow.WriteConsole("Enter teacher name of this group (Press Enter if you don't want to change):");
-        //    Teacher: string updatedTeacher = Console.ReadLine().Trim();
-
-        //        if (!string.IsNullOrEmpty(updatedTeacher))
-        //        {
-        //            if (!Regex.IsMatch(updatedTeacher, @"^[\p{L}]+(?:\s[\p{L}]+)?$"))
-        //            {
-        //                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidNameFormat);
-        //                goto Teacher;
-        //            }
-        //        }
-
-        //        ConsoleColor.Yellow.WriteConsole("Enter room name of this group (Press Enter if you don't want to change):");
-        //        string updatedRoom = Console.ReadLine().Trim();
-
-        //        try
-        //        {
-        //            _educationService.Update(new() { Id = id, Name = updatedName, Teacher = updatedTeacher, Room = updatedRoom });
-
-        //            ConsoleColor.Green.WriteConsole(ResponseMessages.UpdateSuccess);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ConsoleColor.Red.WriteConsole(ex.Message);
-        //        }
-        //    }
-
-
-        }
-    
-    
     }
+
 }

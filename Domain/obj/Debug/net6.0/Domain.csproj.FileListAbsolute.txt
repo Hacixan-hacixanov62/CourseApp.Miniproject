@@ -1,0 +1,15 @@
+C:\C#\ConsoleApp.Miniproject2\Domain\bin\Debug\net6.0\Domain.deps.json
+C:\C#\ConsoleApp.Miniproject2\Domain\bin\Debug\net6.0\Domain.runtimeconfig.json
+C:\C#\ConsoleApp.Miniproject2\Domain\bin\Debug\net6.0\Domain.dll
+C:\C#\ConsoleApp.Miniproject2\Domain\bin\Debug\net6.0\Domain.pdb
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.csproj.AssemblyReference.cache
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.AssemblyInfoInputs.cache
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.AssemblyInfo.cs
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.csproj.CoreCompileInputs.cache
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.sourcelink.json
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.dll
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\refint\Domain.dll
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.pdb
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\Domain.genruntimeconfig.cache
+C:\C#\ConsoleApp.Miniproject2\Domain\obj\Debug\net6.0\ref\Domain.dll

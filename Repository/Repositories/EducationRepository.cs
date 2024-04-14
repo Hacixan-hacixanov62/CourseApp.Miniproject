@@ -17,11 +17,7 @@ namespace Repository.Repositories
             _context = new AppDbContext();
         }
 
-        public async Task CreateAsync(Education education)
-        {
-            await _context.Educations.AddAsync(education);
-            await _context.SaveChangesAsync();
-        }
+      
 
         public async Task<List<Education>> GetAllWithGroupsAsync()
         {

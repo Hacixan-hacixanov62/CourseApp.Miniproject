@@ -15,12 +15,14 @@ namespace Repository.Repositories
 
         public async Task CreateAsync(T entity)
         {
-            _context.Set<T>().ToListAsync();
+           await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
            _context.Set<T>().Remove(entity);
+           await _context.SaveChangesAsync();
         }
 
         public async Task<List<T>> GetAllAsync()
@@ -30,7 +32,7 @@ namespace Repository.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync();
+            return await _context.Set<T>().FirstOrDefaultAsync(m=>m.Id==id);
         }
 
         public async Task UpdateAsync(T entity)

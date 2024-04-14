@@ -1,8 +1,10 @@
 ﻿using Domain.Models;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Service.Helpers.Constans;
 using Service.Helpers.Extensions;
 using Service.Services;
 using Service.Services.Interfaces;
+using System.Data;
 using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -11,128 +13,131 @@ namespace ConsoleApp.Miniproject2.Controllers
     public class GroupControllers
     {
         private readonly IGroupService _groupService;
+        private readonly IEducationService _educationService;
+       
 
         public GroupControllers()
         {
             _groupService = new GroupService();
-
+            _educationService = new EducationService();
+           
         }
 
-        public async Task CreateAsync()
+        public async Task GroupCreateAsync()
         {
 
             ConsoleColor.Magenta.WriteConsole("Add Group name: ");
-        Name: string name = Console.ReadLine();
+        GroupName: string name = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(name))
             {
                 ConsoleColor.Red.WriteConsole("Input can't be empty ");
-                goto Name;
+                goto GroupName;
             }
-
-            var result = await _groupService.GetAllAsync();
-            if (result.Any(m => m.Name == name))
-            {
-                ConsoleColor.Red.WriteConsole("Please add new name ");
-                goto Name;
-            }
-
-            if (!Regex.IsMatch(name, @"^[\p{L}\p{M}' \.\-]+$"))
-            {
-                ConsoleColor.Red.WriteConsole("Format is wrong");
-                goto Name;
-            }
-
-            if (name.Length < 3)
-            {
-                ConsoleColor.Red.WriteConsole(" Name or Surname must not be less than three letters ");
-                goto Name;
-            }
-
-
-            ConsoleColor.Magenta.WriteConsole("Add Group capacity : ");
-        Capacity: string capacityStr = Console.ReadLine();
-
-
-            if (string.IsNullOrWhiteSpace(capacityStr))
-            {
-                ConsoleColor.Red.WriteConsole("Input can't be empty ");
-                goto Capacity;
-            }
-
-            int capacity;
-
-            if (!int.TryParse(capacityStr, out capacity))
-            {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidCapacityFormat + ". Please try again:");
-                goto Capacity;
-            }
-
-            Domain.Models.Group addedGroup;
-
-
-            try
-            {
-                addedGroup = await _groupService.GetByIdAsync(capacity);
-            }
-            catch (Exception)
-            {
-                ConsoleColor.Red.WriteConsole("There is no group with specified id. Please try again:");
-                goto Capacity;
-            }
-
-            try
-            {
-                if (addedGroup.GroupCount == 5)
-                {
-                    ConsoleColor.Red.WriteConsole("Group can have maximum 5 students. Please choose another group:");
-                    goto Capacity;
-                }
-
-                _groupService.Create(new  Group() { Name = name, Capacity = capacity});
-
-                ConsoleColor.Green.WriteConsole("Data successfully added");
-            }
-            catch (Exception ex)
-            {
-                ConsoleColor.Red.WriteConsole(ex.Message);
-            }
-
             
 
-            ConsoleColor.Magenta.WriteConsole("Add Group EducationId : ");
-       EducationId: string educationStr = Console.ReadLine();
+         
+
+            //if (result.Any(m => m.Name == name))
+            //{
+            //    ConsoleColor.Red.WriteConsole("Please add new name ");
+            //    goto GroupName;
+            //}
+
+            //if (!Regex.IsMatch(name, @"^[\p{L}\p{M}' \.\-]+$"))
+            //{
+            //    ConsoleColor.Red.WriteConsole("Format is wrong");
+            //    goto GroupName;
+            //}
+
+            //if (name.Length < 3)
+            //{
+            //    ConsoleColor.Red.WriteConsole(" Name or Surname must not be less than three letters ");
+            //    goto GroupName;
+            //}
 
 
-            if (string.IsNullOrWhiteSpace(educationStr))
+            ConsoleColor.Magenta.WriteConsole("Add Education id: ");
+        EducationId: string idStr = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(idStr))
             {
                 ConsoleColor.Red.WriteConsole("Input can't be empty ");
                 goto EducationId;
             }
 
-            int educationId;
+            int id;
+            bool isCorrectFormat =int.TryParse(idStr, out id);
 
-            if (!int.TryParse(educationStr, out educationId))
+            if (isCorrectFormat)
+
             {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidIdFormat + ". Please try again:");
-                goto EducationId;
+
+
+                if (!int.TryParse(idStr, out id))
+                {
+
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidCapacityFormat + ". Please try again:");
+                    goto EducationId;
+                }
+                Domain.Models.Education addedGroup;
+
+                try
+                {
+                    addedGroup = await _educationService.GetByIdAsync(id);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole("There is no group with specified id. Please try again:");
+                    goto EducationId;
+                }
+
+
+
+                ConsoleColor.Magenta.WriteConsole("Add Group capacity : ");
+            GroupCapacity: string capacityStr = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(capacityStr))
+                {
+                    ConsoleColor.Red.WriteConsole("Input can't be empty ");
+                    goto GroupCapacity;
+                }
+
+                int capacity;
+
+                if (!int.TryParse(capacityStr, out capacity))
+                {
+                    ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidCapacityFormat + ". Please try again:");
+                    goto GroupCapacity;
+                }
+
+
+
+             
+
+                try
+                {
+                    DateTime time = DateTime.Now;
+
+                    await _groupService.CreateAsync(new Domain.Models.Group() { Name = name.Trim().ToLower(), Capacity = capacity, EducationId = id, CreatedDate = time });
+                    ConsoleColor.Green.WriteConsole("Data successfully added");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole("Group can have maximum 5 students. Please choose another group:");
+                }
+
+
+
+                //if()
+
+                //    ConsoleColor.Red.WriteConsole("There is no group with specified id. Please try again:");
+                //goto EducationId;
             }
-            else if (educationId < 1)
-            {
-                ConsoleColor.Red.WriteConsole("Id cannot be less than 1. Please try again:");
-                goto EducationId;
-            }
-
-            //if()
-
-
-
-            //    ConsoleColor.Red.WriteConsole("There is no group with specified id. Please try again:");
-            //goto EducationId;
 
         }
 
-        public async Task DeleteAsync()
+        public async Task GroupDeleteAsync()
         {
 
             ConsoleColor.Cyan.WriteConsole("Add group id:");
@@ -143,7 +148,7 @@ namespace ConsoleApp.Miniproject2.Controllers
             {
                 try
                 {
-                    _groupService.DeleteAsync(id);
+                    await _groupService.DeleteAsync(id);
                     ConsoleColor.Green.WriteConsole("Data successfully deleted");
                 }
                 catch (Exception ex)
@@ -159,8 +164,12 @@ namespace ConsoleApp.Miniproject2.Controllers
             }
         }
 
+        public async Task GroupUpdateAsync()
+        {
 
-        public async Task GetAllAsync()
+        }
+
+        public async Task GroupGetAllAsync()
         {
             var response = await _groupService.GetAllAsync();
 
@@ -172,10 +181,10 @@ namespace ConsoleApp.Miniproject2.Controllers
             }
         }
 
-        public async Task SearchAsync()
+        public async Task GroupSearchAsync()
         {
 
-        SearchAsync: ConsoleColor.Cyan.WriteConsole("Add search text: ");
+        SearchAsync: ConsoleColor.White.WriteConsole("Add search text: ");
 
         Name: string searchText = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(searchText))
@@ -208,7 +217,7 @@ namespace ConsoleApp.Miniproject2.Controllers
         }
     
 
-        public async Task GetByIdAsync()
+        public async Task GroupGetByIdAsync()
         {
 
             ConsoleColor.Cyan.WriteConsole("Add Id: ");
@@ -237,23 +246,53 @@ namespace ConsoleApp.Miniproject2.Controllers
             }
         }
 
-        public async Task FilterByEducationNameAsync()
+        public async Task GroupFilterByEducationNameAsync()
         {
           
-            ConsoleColor.White.WriteConsole("Add Education Id: ");
-            string date = Console.ReadLine();
+            ConsoleColor.White.WriteConsole("Add Education name ");
+        Education: string name = Console.ReadLine();
 
-            var educations = await _groupService.FilterByEducationNameAsync(date);
-            foreach (var item in educations)
-            { 
-                Console.WriteLine(item.Name);
+            if(string.IsNullOrWhiteSpace(name))
+            {
+                ConsoleColor.Red.WriteConsole("Input can not empty ");
+                goto Education;
             }
+            else
+            {
+                try
+                {
+
+                    var response = await _groupService.FilterByEducationNameAsync(name);
+
+                    if (response.Count !=0)
+                    {
+                        foreach(var item in response)
+                        {
+                            string data = $"Group name : {item.Name}, Education : {item.Education.Name}";
+                            await Console.Out.WriteLineAsync(data);
+                        }
+                    }
+                    else
+                    {
+                        ConsoleColor.Red.WriteConsole("This study could not be found  ");
+                        goto Education;
+                    }
+
+                }
+                catch(Exception ex)
+                {
+                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    goto Education;
+                }
+            }
+
         }
 
-        public async Task GetAllWithEducationIdAsync(int id)
+        public async Task GroupGetAllWithEducationIdAsync()
         {
             ConsoleColor.Cyan.WriteConsole("Add Group education id: ");
         Id: string idStr = Console.ReadLine();
+            int id;
             
 
             bool isCorrectIdFormat = int.TryParse(idStr, out id);
@@ -306,7 +345,7 @@ namespace ConsoleApp.Miniproject2.Controllers
         }
 
 
-        public async Task SortWithCapacityAsync()
+        public async Task GroupSortWithCapacityAsync()
         {
             try
             {
@@ -329,10 +368,7 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         }
 
-        public async Task UpdateAsync()
-        {
-
-        }
+        
 
     }
 }

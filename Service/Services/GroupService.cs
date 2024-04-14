@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Repository.Repositories;
 using Repository.Repositories.Interfaces;
 using Service.Helpers.Constans;
@@ -26,7 +27,7 @@ namespace Service.Services
         {
             if (id == null) throw new ArgumentNullException();
 
-           Group group = await _groupRepository.GetByIdAsync((int)id);
+            Group group = await _groupRepository.GetByIdAsync((int)id);
 
             if (group is null) throw new NotFoundExceptions(ResponseMessages.DataNotFound);
 
@@ -43,7 +44,7 @@ namespace Service.Services
             return await _groupRepository.GetAllAsync();
         }
 
-        public async Task<List<Group>> FilterByEducationNameAsync(string name )
+        public async Task<List<Group>> FilterByEducationNameAsync(string name)
         {
             return await _groupRepository.FilterByEducationNameAsync(name);
         }
@@ -62,7 +63,7 @@ namespace Service.Services
         {
             if (id == null) throw new ArgumentNullException();
 
-           Group group = await _groupRepository.GetByIdAsync((int)id);
+            Group group = await _groupRepository.GetByIdAsync((int)id);
 
             if (group is null)
             {
@@ -72,9 +73,12 @@ namespace Service.Services
             return group;
         }
 
-        public Task CreateAsync()
+
+        public async Task CreateAsync(Group group)
         {
-            throw new NotImplementedException();
+            if (group == null) throw new NotImplementedException();
+            await _groupRepository.CreateAsync(group);
+
         }
     }
 }
