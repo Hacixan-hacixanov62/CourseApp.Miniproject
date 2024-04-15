@@ -21,8 +21,9 @@ namespace Service.Services
 
         public async  Task UpdateAsync(Group group)
         {
-           await _groupRepository.Groups.UpdateAsync(group);
-            _groupRepository.SaveChangesAsync();
+        //    await _groupRepository.Groups.UpdateAsync(group);
+        //    _groupRepository.SaveChangesAsync();
+
 
         }
 
@@ -75,7 +76,6 @@ namespace Service.Services
 
             return group;
         }
-
 
         public async Task CreateAsync(Group group)
         {

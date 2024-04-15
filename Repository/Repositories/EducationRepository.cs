@@ -40,7 +40,7 @@ namespace Repository.Repositories
 
         public async Task<List<Education>> SortWithCreatedDateAsync(string date)
         {
-            //return await _context.Set<Education>().Include(date).ToListAsync();
+           
 
             if (date == "desc")
             {

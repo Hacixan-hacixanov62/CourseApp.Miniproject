@@ -1,4 +1,5 @@
 ﻿
+using Domain.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using Service.Helpers.Constans;
 using Service.Helpers.Extensions;
@@ -87,75 +88,84 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         public async Task EducationUpdateAsync()
         {
+            bool isInputValid = false;
 
-            if (_educationService.GetAllAsync().Count == 0)
+            while (!isInputValid)
             {
-                ConsoleColor.Red.WriteConsole("There is not any group. Please create one");
-                return;
-            }
-
-            Console.WriteLine();
-            ConsoleColor.Yellow.WriteConsole("Groups:");
-            _educationService.GetAllAsync();
-
-            ConsoleColor.Yellow.WriteConsole("Enter id of the group you want to update: (Press Enter to cancel)");
-        Id: string idStr = Console.ReadLine();
-
-            if (string.IsNullOrWhiteSpace(idStr))
-            {
-                return;
-            }
-
-            int id;
-
-            if (!int.TryParse(idStr, out id))
-            {
-                ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidIdFormat + ". Please try again:");
-                goto Id;
-            }
-            else
-            {
-                if (id < 1)
-                {
-                    ConsoleColor.Red.WriteConsole("Id cannot be less than 1. Please try again:");
-                    goto Id;
-                }
-
-                if (!_educationService.GetAll().Any(m => m.Id == id))
-                {
-                    ConsoleColor.Red.WriteConsole(ResponseMessages.DataNotFound);
-                    return;
-                }
-
-                ConsoleColor.Yellow.WriteConsole("Enter name (Press Enter if you don't want to change):");
-                string updatedName = Console.ReadLine().Trim();
-
-                ConsoleColor.Yellow.WriteConsole("Enter teacher name of this group (Press Enter if you don't want to change):");
-            Teacher: string updatedTeacher = Console.ReadLine().Trim();
-
-                if (!string.IsNullOrEmpty(updatedTeacher))
-                {
-                    if (!Regex.IsMatch(updatedTeacher, @"^[\p{L}]+(?:\s[\p{L}]+)?$"))
-                    {
-                        ConsoleColor.Red.WriteConsole(ResponseMessages.InvalidNameFormat);
-                        goto Teacher;
-                    }
-                }
-
-                ConsoleColor.Yellow.WriteConsole("Enter room name of this group (Press Enter if you don't want to change):");
-                string updatedRoom = Console.ReadLine().Trim();
-
                 try
                 {
-                    _educationService.UpdateAsync(new() { Id = id, Name = updatedName,});
+                    List<Education> educations = await _educationService.GetAllAsync();
 
-                    ConsoleColor.Green.WriteConsole(ResponseMessages.UpdateSuccess);
+                    Console.WriteLine("Exist Educations:");
+                    foreach (Education education in educations)
+                    {
+                        Console.WriteLine($"EducationId: {education.Id}, Name: {education.Name}");
+                    }
+
+                    Console.WriteLine("Please write education ID:");
+
+                uId: string idStr = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(idStr))
+                    {
+                        ConsoleColor.Red.WriteConsole("ID can't be empty ,please write again.");
+                        goto uId;
+                    }
+
+                    if (!int.TryParse(idStr, out int id))
+                    {
+                        ConsoleColor.Red.WriteConsole("Format is wrong, please write correctly.");
+                        goto uId;
+                    }
+
+                    var existingEducation = await _educationService.GetByIdAsync(id);
+                    if (existingEducation == null)
+                    {
+                        ConsoleColor.Red.WriteConsole("Education not found.");
+                        goto uId;
+                    }
+
+                    ConsoleColor.Cyan.WriteConsole("Please write new education name:");
+                    string name = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        name = existingEducation.Name;
+                    }
+                    else if (!Regex.IsMatch(name, @"^[\p{L}\p{M}' \.\-]+$"))
+                    {
+                        ConsoleColor.Red.WriteConsole("Input isn't correct, please try again.");
+                        continue;
+                    }
+
+                    ConsoleColor.Cyan.WriteConsole("Please write new education color:");
+                    string color = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(color))
+                    {
+                        color = existingEducation.Color;
+                    }
+                    else if (!Regex.IsMatch(color, @"^[\p{L}\p{M}' \.\-]+$"))
+                    {
+                        ConsoleColor.Red.WriteConsole("Input isn't correct, please try again.");
+                        continue;
+                    }
+
+                    existingEducation.Name = name;
+                    existingEducation.Color = color;
+
+                    DateTime time = DateTime.Now;
+                    await _educationService.UpdateAsync(existingEducation);
+                    ConsoleColor.Green.WriteConsole("Education successfully updated.");
+                    isInputValid = true;
                 }
                 catch (Exception ex)
                 {
-                    ConsoleColor.Red.WriteConsole(ex.Message);
+                    Console.WriteLine(ex.Message);
                 }
             }
+
+
+        }
+
 
         public async Task EducationDeleteAsync()
         {
@@ -288,20 +298,41 @@ namespace ConsoleApp.Miniproject2.Controllers
 
         }
 
-        public async Task EducationSortWithCreatedDateAsync()
+        public async Task<List<Education>> EducationSortWithCreatedDateAsync()
         {
-            ConsoleColor.DarkCyan.WriteConsole("Enter Name of the student you want to delete: (Press Enter to cancel)");
-        Name: string sortName = Console.ReadLine();
-
-            if (sortName == "asc" || sortName == "desc")
+            try
             {
+                string sortType;
+                do
+                {
+                    ConsoleColor.White.WriteConsole("Choose sort type: Asc or Desc");
+                        sortType = Console.ReadLine();
 
+                    if (sortType.ToLower() != "asc" && sortType.ToLower() != "desc")
+                    {
+                        ConsoleColor.White.WriteConsole("Please choose sorting type 'Asc' or 'Desc'. ");
+                    }
 
+                }
+                while (sortType.ToLower() != "asc" && sortType.ToLower() != "desc");
+
+                var educations = await _educationService.SortWithCreatedDateAsync(sortType);
+
+                foreach(var education in educations)
+                {
+                    Console.WriteLine($"Name: {education.Name}, CreateDate: {education.CreatedDate}");
+
+                }
+
+                return educations ;
 
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<Education> { };
 
-
-
+            }
         }
 
 

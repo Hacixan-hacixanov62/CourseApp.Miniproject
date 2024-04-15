@@ -74,10 +74,12 @@ namespace Service.Services
 
         public async Task UpdateAsync(Education data)
         {
-             await _educationRepository.UpdateAsync(data);
+            await _educationRepository.Groups.UpdateAsync(group);
+            _educationRepository.SaveChangesAsync();
+
         }
-   
-    
+
+
     }
 
     
