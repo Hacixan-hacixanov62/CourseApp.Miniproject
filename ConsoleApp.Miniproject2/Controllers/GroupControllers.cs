@@ -34,21 +34,18 @@ namespace ConsoleApp.Miniproject2.Controllers
                 ConsoleColor.Red.WriteConsole("Input can't be empty ");
                 goto GroupName;
             }
-            
 
-         
-
-            //if (result.Any(m => m.Name == name))
+            //if (name.Any(m => m.Name == name))
             //{
             //    ConsoleColor.Red.WriteConsole("Please add new name ");
             //    goto GroupName;
             //}
 
-            //if (!Regex.IsMatch(name, @"^[\p{L}\p{M}' \.\-]+$"))
-            //{
-            //    ConsoleColor.Red.WriteConsole("Format is wrong");
-            //    goto GroupName;
-            //}
+            if (!Regex.IsMatch(name, @"^[\p{L}\p{M}' \.\-]+$"))
+            {
+                ConsoleColor.Red.WriteConsole("Format is wrong");
+                goto GroupName;
+            }
 
             //if (name.Length < 3)
             //{
